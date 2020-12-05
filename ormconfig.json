@@ -3,6 +3,12 @@
   "host": "localhost",
   "port": 3306,
   "username": "root",
-  "password": "root",
-  "database": "drone_api_db"
+  "password": "",
+  "database": "drone_api_db",
+  "migrations": [
+    "./src/database/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "./src/database/migrations"
+  }
 }
