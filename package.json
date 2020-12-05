@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/eduns/drone-node-api.git",
-  "author": "Eduardo Nunes <nunes_eduardo@rocketmail.com>",
+  "author": "Eduardo Nunes",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
