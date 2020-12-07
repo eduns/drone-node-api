@@ -1,36 +1,49 @@
-import { v4 as uuid } from 'uuid'
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
+@Entity('drones')
 class Drone {
-  id: string
-  customer_name: string
-  customer_image: string
-  customer_address: string
-  battery: number
-  max_speed: number
-  average_speed: number
-  status: string
-  current_fly: number
+  @PrimaryGeneratedColumn('increment')
+  id: number
 
-  constructor(
-    customer_name: string,
-    customer_image: string,
-    customer_address: string,
-    battery: number,
-    max_speed: number,
-    average_speed: number,
-    status: string,
-    current_fly: number
-  ) {
-    this.id = uuid()
-    this.customer_name = customer_name
-    this.customer_image = customer_image
-    this.customer_address = customer_address
-    this.battery = battery
-    this.max_speed = max_speed
-    this.average_speed = average_speed
-    this.status = status
-    this.current_fly = current_fly
-  }
+  @Column()
+  customer_name: string
+
+  @Column()
+  customer_image: string
+
+  @Column()
+  customer_address: string
+
+  @Column('int')
+  battery: number
+
+  @Column({
+    type: 'decimal',
+    precision: 3,
+    scale: 1,
+    transformer: {
+      to: (value: string) => value,
+      from: (value: string) => parseFloat(value)
+    }
+  })
+  max_speed: number
+
+  @Column({
+    type: 'decimal',
+    precision: 3,
+    scale: 1,
+    transformer: {
+      to: (value: string) => value,
+      from: (value: string) => parseFloat(value)
+    }
+  })
+  average_speed: number
+
+  @Column()
+  status: string
+
+  @Column('int')
+  current_fly: number
 }
 
 export default Drone
