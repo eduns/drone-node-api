@@ -37,6 +37,7 @@ const DroneSchema = Joi.object({
   }),
   status: Joi.string().min(2).max(255).required().messages({
     'string.empty': 'não pode ser vazio',
+    'any.required': 'não pode ser nulo',
     'string.min': 'deve ter no mínimo 2 caracteres',
     'string.max': 'deve ter no máximo 255 caracteres'
   }),
