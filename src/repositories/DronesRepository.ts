@@ -1,57 +1,34 @@
+import { EntityRepository, Repository } from 'typeorm'
+
 import Drone from '../models/Drone'
 
-interface DroneDTO {
-  customer_name: string
-  customer_image: string
-  customer_address: string
-  battery: number
-  max_speed: number
-  average_speed: number
-  status: string
-  current_fly: number
-}
-
-class DronesRepository {
-  private drones: Drone[]
-
-  constructor() {
-    this.drones = []
-  }
-
-  public findAll(): Drone[] {
-    return this.drones
-  }
-
-  public findById(droneId: string): Drone | null {
-    const droneFound = this.drones.find(drone => drone.id === droneId)
+@EntityRepository(Drone)
+class DronesRepository extends Repository<Drone> {
+  public async findDroneById(droneId: number): Promise<Drone | null> {
+    const droneFound = await this.findOne({
+      where: { id: droneId }
+    })
 
     return droneFound || null
   }
 
-  public create({
-    customer_name,
-    customer_image,
-    customer_address,
-    battery,
-    max_speed,
-    average_speed,
-    status,
-    current_fly
-  }: DroneDTO): Drone {
-    const drone = new Drone(
-      customer_name,
-      customer_image,
-      customer_address,
-      battery,
-      max_speed,
-      average_speed,
-      status,
-      current_fly
-    )
+  public async paginateDrones(page: number, limit: number): Promise<Drone[]> {
+    const [paginatedDrones] = await this.findAndCount({
+      take: limit,
+      skip: page
+    })
 
-    this.drones.push(drone)
+    return paginatedDrones
+  }
 
-    return drone
+  public async sortDrones(sort: string, order: string): Promise<Drone[]> {
+    const drones = await this.find({
+      order: {
+        [sort]: order
+      }
+    })
+
+    return drones
   }
 }
 
