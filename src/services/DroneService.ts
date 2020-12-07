@@ -130,6 +130,10 @@ class DroneService {
   public async update(id: string, data: DroneDTO): Promise<void> {
     const droneId = parseInt(id)
 
+    if (isNaN(droneId)) {
+      throw new AppError('id inválido')
+    }
+
     const dronesRepository = getCustomRepository(DronesRepository)
 
     const droneFound = await dronesRepository.findDroneById(droneId)
@@ -138,24 +142,9 @@ class DroneService {
       throw new AppError('drone não encontrado', 404)
     }
 
-    if (data.customer_name) droneFound.customer_name = data.customer_name
+    await DroneSchema.validateAsync(data)
 
-    if (data.customer_image) droneFound.customer_image = data.customer_image
-
-    if (data.customer_address)
-      droneFound.customer_address = data.customer_address
-
-    if (data.battery) droneFound.battery = data.battery
-
-    if (data.max_speed) droneFound.max_speed = data.max_speed
-
-    if (data.average_speed) droneFound.average_speed = data.average_speed
-
-    if (data.status) droneFound.status = data.status
-
-    if (data.current_fly) droneFound.current_fly = data.current_fly
-
-    await dronesRepository.update(droneId, droneFound)
+    await dronesRepository.update(droneId, data)
   }
 
   /**
@@ -164,6 +153,10 @@ class DroneService {
    */
   public async delete(id: string): Promise<void> {
     const droneId = parseInt(id)
+
+    if (isNaN(droneId)) {
+      throw new AppError('id inválido')
+    }
 
     const dronesRepository = getCustomRepository(DronesRepository)
 
